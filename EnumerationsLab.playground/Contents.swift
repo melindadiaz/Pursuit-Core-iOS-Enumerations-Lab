@@ -1,15 +1,22 @@
 import UIKit
 
-// Question One
+// Question One !!!
 
 // a. Define an enumeration called iOSDeviceType with member values iPhone, iPad, iWatch. Create a variable called myiPad and assign it to .iPad.
+
+enum IOSDeviceType: String {
+    case iPhone = "8+"
+    case iPad
+    case iWatch
+}
+
 
 // Your code here
 
 // Uncomment the lines below to test your solution
-
-//let myiPad = iOSDeviceType.iPad
-//assert(myiPad == .iPad)
+let myPhone = IOSDeviceType.iPhone
+let myiPad = IOSDeviceType.iPad
+assert(myiPad == .iPad)
 
 // b. Adjust your code above so that iPhone and iPad have associated values of type String which represents the model number.  Create an instance of a .iPhone("8+") and assign it to a variable called myPhone
 
@@ -17,10 +24,10 @@ import UIKit
 
 // Uncomment the lines below to test your solution
 
-//switch myPhone {
-//case let .iPhone(model): assert(model == "8+", "Was expecting a model type of 8+, but got \(model)")
-//default: fatalError("Was expecting an iPhone but got \(myPhone)")
-//}
+switch myPhone {
+case let .iPhone(model): assert(model == "8+", "Was expecting a model type of 8+, but got \(model)")
+default: fatalError("Was expecting an iPhone but got \(myPhone)")
+}
 
 // Question Two
 
@@ -33,22 +40,42 @@ import UIKit
 
 
 enum Step {
-    case up
-    case down
-    case left
-    case right
+    case up(Int)
+    case down(Int)
+    case left(Int)
+    case right(Int)
 }
 
+func getPosition(startingAt: (Int,Int), afterSteps: [Step]) -> (Int,Int) {
+    var x = 0
+    var y = 0
+    for element in afterSteps {
+        switch element {
+        case .up:
+            y += 1
+        case .down:
+            y -= 1
+        case .right:
+            x += 1
+        case .left:
+            x -= 1
+        }
+    }
+    let finalPosition = (x,y)
+    return finalPosition
+}
 // Your function here
-
 // Uncomment the lines below to test your solution
 
-//let startingLocation = (x: 0, y: 0)
-//let steps: [Step] = [.up, .up, .left, .down, .left]
-//let expectedEndPosition = (x: -2, y: 1)
-//let endPosition = getPosition(startingAt: startingLocation, afterSteps: steps)
-//
-//assert(endPosition == expectedEndPosition, "Was expecting \(expectedEndPosition) but got \(endPosition)")
+let startingLocation = (x: 0, y: 0)
+let steps: [step] = [.up, .up, .left, .down, .left]
+let expectedEndPosition = (x: -2, y: 1)
+let endPosition = getPosition(startingAt: startingLocation, afterSteps: steps)
+
+func getPostition(startingAt: [Int], afterSteps:[Int]) -> (Int, Int) {
+    
+}
+assert(endPosition == expectedEndPosition, "Was expecting \(expectedEndPosition) but got \(endPosition)")
 
 // Question Three
 
@@ -59,6 +86,23 @@ enum Coin: Int {
     case nickle = 5
     case dime = 10
     case quarter = 25
+}
+
+func getTotalValue(from: [(number: Int, coin: Coin)]) -> Int {
+    var totalCents = 0
+    for num in from {
+        switch num.coin {
+        case .penny:
+            totalCents += num.number * Coin.penny.rawValue
+        case .nickle:
+            totalCents += num.number * Coin.nickle.rawValue
+        case .dime:
+            totalCents += num.number * Coin.dime.rawValue
+        case .quarter:
+            totalCents += num.number * Coin.quarter.rawValue
+        }
+    }
+    return totalCents
 }
 
 // Your function here
