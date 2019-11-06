@@ -4,8 +4,8 @@ import UIKit
 
 // a. Define an enumeration called iOSDeviceType with member values iPhone, iPad, iWatch. Create a variable called myiPad and assign it to .iPad.
 
-enum IOSDeviceType: String {
-    case iPhone = "8+"
+enum IOSDeviceType {
+    case iPhone(String) //= "8+"
     case iPad
     case iWatch
 }
@@ -14,11 +14,12 @@ enum IOSDeviceType: String {
 // Your code here
 
 // Uncomment the lines below to test your solution
-let myPhone = IOSDeviceType.iPhone
-let myiPad = IOSDeviceType.iPad
-assert(myiPad == .iPad)
+//let myPhone = IOSDeviceType.iPhone
+//let myiPad = IOSDeviceType.iPad
+//assert(myiPad == .iPad)
 
 // b. Adjust your code above so that iPhone and iPad have associated values of type String which represents the model number.  Create an instance of a .iPhone("8+") and assign it to a variable called myPhone
+let myPhone = IOSDeviceType.iPhone("8+")
 
 // Your code here
 
@@ -40,37 +41,36 @@ default: fatalError("Was expecting an iPhone but got \(myPhone)")
 
 
 enum Step {
-    case up(Int)
-    case down(Int)
-    case left(Int)
-    case right(Int)
+    case up
+    case down
+    case left
+    case right
 }
 
 func getPosition(startingAt: (Int,Int), afterSteps: [Step]) -> (Int,Int) {
-    var x = 0
-    var y = 0
+    var startPostion = (startingAt.0,startingAt.1)
     for element in afterSteps {
         switch element {
         case .up:
-            y += 1
+            startPostion.1 += 1
         case .down:
-            y -= 1
+            startPostion.1 -= 1
         case .right:
-            x += 1
+            startPostion.0 += 1
         case .left:
-            x -= 1
+            startPostion.0 -= 1
         }
     }
-    let finalPosition = (x,y)
-    return finalPosition
+    return startPostion
 }
 // Your function here
 // Uncomment the lines below to test your solution
 
 let startingLocation = (x: 0, y: 0)
-let steps: [step] = [.up, .up, .left, .down, .left]
+let step: [Step] = [.up, .up, .left, .down, .left]
 let expectedEndPosition = (x: -2, y: 1)
-let endPosition = getPosition(startingAt: startingLocation, afterSteps: steps)
+
+let endPosition = getPosition(startingAt: startingLocation, afterSteps: step)
 
 func getPostition(startingAt: [Int], afterSteps:[Int]) -> (Int, Int) {
     
@@ -88,39 +88,59 @@ enum Coin: Int {
     case quarter = 25
 }
 
-func getTotalValue(from: [(number: Int, coin: Coin)]) -> Int {
-    var totalCents = 0
-    for num in from {
-        switch num.coin {
+
+//always name your external values in this case (from tuples: [(Int, coin)]) -> Int) you can leave it like that but its easier to read if you lable it
+func getTotalValue(from tuples: [(numberOfCoins: Int, typeOfCoin: Coin)]) -> Int { //
+   var totalNumberOfCents = 0
+    for tuple in tuples { //for one single tuple from tuples, a single coin from coins
+        switch tuple.typeOfCoin {
         case .penny:
-            totalCents += num.number * Coin.penny.rawValue
+            totalNumberOfCents += Coin.penny.rawValue * tuple.numberOfCoins
         case .nickle:
-            totalCents += num.number * Coin.nickle.rawValue
+            totalNumberOfCents += Coin.nickle.rawValue * tuple.numberOfCoins
         case .dime:
-            totalCents += num.number * Coin.dime.rawValue
+            totalNumberOfCents += Coin.dime.rawValue * tuple.numberOfCoins
         case .quarter:
-            totalCents += num.number * Coin.quarter.rawValue
+            totalNumberOfCents += Coin.dime.rawValue * tuple.numberOfCoins
+            
         }
     }
-    return totalCents
+    return totalNumberOfCents
 }
+//
+//func getTotalValue(from: [(number: Int, coin: Coin)]) -> Int {
+//    var totalCents = 0
+//    for num in from {
+//        switch num.coin {
+//        case .penny:
+//            totalCents += num.number * Coin.penny.rawValue
+//        case .nickle:
+//            totalCents += num.number * Coin.nickle.rawValue
+//        case .dime:
+//            totalCents += num.number * Coin.dime.rawValue
+//        case .quarter:
+//            totalCents += num.number * Coin.quarter.rawValue
+//        }
+//    }
+//    return totalCents
+//}
 
 // Your function here
 
 // Uncomment the lines below to test your solution
 
-//let coinArr: [(Int, Coin)] = [
-//    (10, .penny),
-//    (15, .nickle),
-//    (3, .quarter),
-//    (20, .penny),
-//    (3, .dime),
-//    (7, .quarter)
-//]
-//
-//let expectedTotal = 385
-//let total = getTotalValue(from: coinArr)
-//assert(total == expectedTotal, "Was expecting \(expectedTotal), but got \(total)")
+let coinArr: [(Int, typeOfCoin)] = [
+    (10, .penny),
+    (15, .nickle),
+    (3, .quarter),
+    (20, .penny),
+    (3, .dime),
+    (7, .quarter)
+]
+
+let expectedTotal = 385
+let total = getTotalValue(from: coinArr)
+assert(total == expectedTotal, "Was expecting \(expectedTotal), but got \(total)")
 
 // Question Four
 
@@ -128,7 +148,16 @@ func getTotalValue(from: [(number: Int, coin: Coin)]) -> Int {
 // Write a method inside Day that returns whether or not it is a weekday (Monday - Friday)
 
 // Your code here
-
+enum daysOfTheWeek: String {
+    case monday, tuesday, wednesday, thursday, friday, saturday, sunday
+    switch daysOfTheWeek {
+    case monday, tuesday, wednesday, thursday, friday
+    print("ITs a weekday")
+    default:
+    print("Its a weekend!!")
+    }
+    
+}
 // Uncomment the lines below to test your solution
 
 //assert(Day.monday.isWeekday() == true, "Monday is a weekday")
